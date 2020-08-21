@@ -167,3 +167,22 @@ export function table2excel(element, opts = {}) {
     }
     return wbout;
 }
+
+export function array2excel(element, opts = {}) {
+    const config = {
+        filename: "excel-list",
+        bookType: "xlsx",
+    };
+    const conf = { ...config, ...opts };
+    const bookType = conf.bookType;
+    const filename = conf.filename;
+
+    var wb = XLSX.utils.table_to_book(document.querySelector(element));
+    var wbout = XLSX.write(wb, { bookType: bookType, bookSST: true, type: "array" });
+    try {
+        saveAs(new Blob([wbout], { type: "application/octet-stream" }), `${filename}.${bookType}`);
+    } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+    }
+    return wbout;
+}
